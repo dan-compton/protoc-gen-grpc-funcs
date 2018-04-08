@@ -2,7 +2,44 @@
 
 This plugin, adapted from [protoc-gen-grpc-go-service](https://github.com/nstogner/protoc-gen-grpc-go-service), generates a default implementation of grpc-defined services. This generated implementation consists of a struct whose members are functions which implement the defined rpc endpoints.  This allows the developer to implement the grpc spec one endpoint at a time, and makes the addition of mock endpoints as simple as defining a function, and pointing the struct member to that function definition.  
 
-See the [examples](examples/) for more details.
+NOTE: The generated implementation is meant to live in the same package as the generated grpc service interface.
+
+# Example
+
+A generated service implementation may look like the following. Note that a constructor function is created, as is a method for registering the implementation with a grpc server.  See the [examples](examples/) for more an more details.
+
+```
+// ExampleServiceImplementation is an implementation of the grpc-defined interface, ExampleService.
+// Its members are functions which implement the defined rpc endpoints.
+type ExampleServiceImplementation struct {
+	EchoMethod func(ctx context.Context, input *InputMessage) (*OutputMessage, error)
+}
+
+func (t *ExampleServiceImplementation) Echo(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
+	return t.EchoMethod(ctx, input)
+}
+
+// Register associates the implementation with a grpc server.
+// NOTE: this can only be called once.
+func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
+	RegisterExampleServiceServer(t, srv)
+}
+
+
+// NewExampleServiceImplementation creates an instance of ExampleService with unimplemented method stubs.
+// NOTE: you should provide your own functions which implement the underlying methods.
+// By default, method stubs return codes.Unimplemented.
+func NewExampleServiceImplementation() *ExampleServiceImplementation {
+	var t = new(ExampleServiceImplementation)
+
+	t.EchoMethod = func(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
+		return nil, status.Errorf(codes.Unimplemented, "Echo has not been implemented")
+	}
+    return t
+}
+```
+
+
 
 
 # Building
