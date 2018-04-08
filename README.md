@@ -27,7 +27,6 @@ func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
 
 // NewExampleServiceImplementation creates an instance of ExampleService with unimplemented method stubs.
 // NOTE: you should provide your own functions which implement the underlying methods.
-// By default, method stubs return codes.Unimplemented.
 func NewExampleServiceImplementation() *ExampleServiceImplementation {
 	var t = new(ExampleServiceImplementation)
 

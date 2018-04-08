@@ -298,7 +298,6 @@ func (t *{{$Type}}{{$TypeSuffix}}) Register(srv *grpc.Server) {
 
 // New{{$Type}}{{$TypeSuffix}} creates an instance of {{$Type}} with unimplemented method stubs.
 // NOTE: you should provide your own functions which implement the underlying methods.
-// By default, method stubs return codes.Unimplemented.
 func New{{$Type}}{{$TypeSuffix}}() *{{$Type}}{{$TypeSuffix}} {
 	var t = new({{$Type}}{{$TypeSuffix}})
 	{{range .Methods}}
