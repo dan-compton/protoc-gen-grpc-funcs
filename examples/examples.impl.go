@@ -21,18 +21,22 @@ type ExampleServiceImplementation struct {
 	EchoStreamInOutMethod func(stream ExampleService_EchoStreamInOutServer) error
 }
 
+// Echo calls the provided implementation, EchoMethod.
 func (t *ExampleServiceImplementation) Echo(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
 	return t.EchoMethod(ctx, input)
 }
 
+// EchoStreamOut calls the provided implementation, EchoStreamOutMethod.
 func (t *ExampleServiceImplementation) EchoStreamOut(input *InputMessage, stream ExampleService_EchoStreamOutServer) error {
 	return t.EchoStreamOutMethod(input, stream)
 }
 
+// EchoStreamIn calls the provided implementation, EchoStreamInMethod.
 func (t *ExampleServiceImplementation) EchoStreamIn(stream ExampleService_EchoStreamInServer) error {
 	return t.EchoStreamInMethod(stream)
 }
 
+// EchoStreamInOut calls the provided implementation, EchoStreamInOutMethod.
 func (t *ExampleServiceImplementation) EchoStreamInOut(stream ExampleService_EchoStreamInOutServer) error {
 	return t.EchoStreamInOutMethod(stream)
 }

@@ -271,20 +271,24 @@ type {{$Type}}{{$TypeSuffix}} struct {
 {{range .Methods}}
 	{{ if .GetClientStreaming }}
 		{{ if .GetServerStreaming }}
+			// {{.Name}} calls the provided implementation, {{.Name}}{{$MethodSuffix}}.
 			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(stream {{.StreamName}}) error {
 				return t.{{.Name}}{{$MethodSuffix}}(stream)
 			}
 		{{ else }}	
-			 func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(stream {{.StreamName}}) error {
+			// {{.Name}} calls the provided implementation, {{.Name}}{{$MethodSuffix}}.
+			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(stream {{.StreamName}}) error {
 				return t.{{.Name}}{{$MethodSuffix}}(stream)
-			 }
+			}
 		{{ end }}
 	{{ else }}
 		{{ if .GetServerStreaming }}
+			// {{.Name}} calls the provided implementation, {{.Name}}{{$MethodSuffix}}.
 			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(input *{{.TrimmedInput}}, stream {{.StreamName}}) error {
 				return t.{{.Name}}{{$MethodSuffix}}(input, stream)
 			}
 		{{ else }}
+			// {{.Name}} calls the provided implementation, {{.Name}}{{$MethodSuffix}}.
 			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(ctx context.Context, input *{{.TrimmedInput}}) (*{{.TrimmedOutput}}, error) {
 				return t.{{.Name}}{{$MethodSuffix}}(ctx, input)
 			}

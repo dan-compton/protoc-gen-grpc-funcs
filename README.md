@@ -15,6 +15,7 @@ type ExampleServiceImplementation struct {
 	EchoMethod func(ctx context.Context, input *InputMessage) (*OutputMessage, error)
 }
 
+// Echo calls the provided implementation, EchoMethod.
 func (t *ExampleServiceImplementation) Echo(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
 	return t.EchoMethod(ctx, input)
 }
