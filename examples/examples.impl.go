@@ -2,6 +2,7 @@
 package examples
 
 import (
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -38,7 +39,7 @@ func (t *ExampleServiceImplementation) EchoStreamInOut(stream ExampleService_Ech
 
 // Register associates the implementation with a grpc server.
 func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
-	RegisterExampleServiceServer(t, srv)
+	RegisterExampleServiceServer(srv, t)
 }
 
 // NewExampleServiceImplementation creates an instance of ExampleService with unimplemented method stubs.

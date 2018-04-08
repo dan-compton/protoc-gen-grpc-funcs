@@ -21,7 +21,7 @@ func (t *ExampleServiceImplementation) Echo(ctx context.Context, input *InputMes
 
 // Register associates the implementation with a grpc server.
 func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
-	RegisterExampleServiceServer(t, srv)
+	RegisterExampleServiceServer(srv, t)
 }
 
 

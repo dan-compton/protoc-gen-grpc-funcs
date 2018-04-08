@@ -236,6 +236,7 @@ var tmpl = template.Must(template.New("server").Parse(`
 package {{.GoPackageName}}
 
 import (
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -293,7 +294,7 @@ type {{$Type}}{{$TypeSuffix}} struct {
 
 // Register associates the implementation with a grpc server.
 func (t *{{$Type}}{{$TypeSuffix}}) Register(srv *grpc.Server) {
-	Register{{$Type}}Server(t, srv)
+	Register{{$Type}}Server(srv, t)
 }
 
 // New{{$Type}}{{$TypeSuffix}} creates an instance of {{$Type}} with unimplemented method stubs.
