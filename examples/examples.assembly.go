@@ -9,9 +9,9 @@ import (
 	"context"
 )
 
-// ExampleServiceImplementation is an implementation of the grpc-defined type, ExampleService.
+// ExampleServiceAssembly is an implementation of the grpc-defined type, ExampleService.
 // Its members are functions which implement the defined rpc endpoints.
-type ExampleServiceImplementation struct {
+type ExampleServiceAssembly struct {
 	EchoMethod func(ctx context.Context, input *InputMessage) (*OutputMessage, error)
 
 	EchoStreamOutMethod func(input *InputMessage, stream ExampleService_EchoStreamOutServer) error
@@ -22,34 +22,34 @@ type ExampleServiceImplementation struct {
 }
 
 // Echo calls the provided implementation, EchoMethod.
-func (t *ExampleServiceImplementation) Echo(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
+func (t *ExampleServiceAssembly) Echo(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
 	return t.EchoMethod(ctx, input)
 }
 
 // EchoStreamOut calls the provided implementation, EchoStreamOutMethod.
-func (t *ExampleServiceImplementation) EchoStreamOut(input *InputMessage, stream ExampleService_EchoStreamOutServer) error {
+func (t *ExampleServiceAssembly) EchoStreamOut(input *InputMessage, stream ExampleService_EchoStreamOutServer) error {
 	return t.EchoStreamOutMethod(input, stream)
 }
 
 // EchoStreamIn calls the provided implementation, EchoStreamInMethod.
-func (t *ExampleServiceImplementation) EchoStreamIn(stream ExampleService_EchoStreamInServer) error {
+func (t *ExampleServiceAssembly) EchoStreamIn(stream ExampleService_EchoStreamInServer) error {
 	return t.EchoStreamInMethod(stream)
 }
 
 // EchoStreamInOut calls the provided implementation, EchoStreamInOutMethod.
-func (t *ExampleServiceImplementation) EchoStreamInOut(stream ExampleService_EchoStreamInOutServer) error {
+func (t *ExampleServiceAssembly) EchoStreamInOut(stream ExampleService_EchoStreamInOutServer) error {
 	return t.EchoStreamInOutMethod(stream)
 }
 
 // Register associates the implementation with a grpc server.
-func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
+func (t *ExampleServiceAssembly) Register(srv *grpc.Server) {
 	RegisterExampleServiceServer(srv, t)
 }
 
-// NewExampleServiceImplementation creates an instance of ExampleService with unimplemented method stubs.
+// NewExampleServiceAssembly creates an instance of ExampleService with unimplemented method stubs.
 // NOTE: you should provide your own functions which implement the underlying methods.
-func NewExampleServiceImplementation() *ExampleServiceImplementation {
-	var t = new(ExampleServiceImplementation)
+func NewExampleServiceAssembly() *ExampleServiceAssembly {
+	var t = new(ExampleServiceAssembly)
 
 	t.EchoMethod = func(ctx context.Context, input *InputMessage) (*OutputMessage, error) {
 		return nil, status.Errorf(codes.Unimplemented, "Echo has not been implemented")

@@ -62,7 +62,7 @@ func goFileName(d *descriptor.FileDescriptorProto) string {
 	if ext := path.Ext(name); ext == ".proto" || ext == ".protodevel" {
 		name = name[:len(name)-len(ext)]
 	}
-	name += ".impl.go"
+	name += ".assembly.go"
 
 	// Does the file have a "go_package" option?
 	// If it does, it may override the filename.
@@ -244,7 +244,7 @@ import (
 )
 
 {{$Type := .Name}}
-{{$TypeSuffix := "Implementation"}}
+{{$TypeSuffix := "Assembly"}}
 {{$MethodSuffix := "Method"}}
 
 // {{$Type}}{{$TypeSuffix}} is an implementation of the grpc-defined type, {{$Type}}.
