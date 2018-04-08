@@ -292,7 +292,6 @@ type {{$Type}}{{$TypeSuffix}} struct {
 {{end}}
 
 // Register associates the implementation with a grpc server.
-// NOTE: this can only be called once.
 func (t *{{$Type}}{{$TypeSuffix}}) Register(srv *grpc.Server) {
 	Register{{$Type}}Server(t, srv)
 }

@@ -37,7 +37,6 @@ func (t *ExampleServiceImplementation) EchoStreamInOut(stream ExampleService_Ech
 }
 
 // Register associates the implementation with a grpc server.
-// NOTE: this can only be called once.
 func (t *ExampleServiceImplementation) Register(srv *grpc.Server) {
 	RegisterExampleServiceServer(t, srv)
 }
