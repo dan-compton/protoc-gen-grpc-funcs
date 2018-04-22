@@ -62,7 +62,7 @@ func goFileName(d *descriptor.FileDescriptorProto) string {
 	if ext := path.Ext(name); ext == ".proto" || ext == ".protodevel" {
 		name = name[:len(name)-len(ext)]
 	}
-	name += ".assembly.go"
+	name += ".funcs.go"
 
 	// Does the file have a "go_package" option?
 	// If it does, it may override the filename.
@@ -220,11 +220,29 @@ type method struct {
 	packageName string
 }
 
+// TODO(dc): Add additional well known types.
+func wellKnownType(typ string) (bool, string) {
+	switch typ {
+	case ".google.protobuf.Empty":
+		return true, "empty.Empty"
+	}
+	return false, typ
+}
+
 // The following methods are used by the template.
 func (m method) TrimmedInput() string {
+	ok, typ := wellKnownType(m.GetInputType())
+	if ok {
+		return typ
+	}
 	return strings.TrimPrefix(m.GetInputType(), fmt.Sprintf(".%s.", m.packageName))
 }
+
 func (m method) TrimmedOutput() string {
+	ok, typ := wellKnownType(m.GetOutputType())
+	if ok {
+		return typ
+	}
 	return strings.TrimPrefix(m.GetOutputType(), fmt.Sprintf(".%s.", m.packageName))
 }
 func (m method) StreamName() string {
@@ -239,12 +257,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
 	"context"
 )
 
 {{$Type := .Name}}
-{{$TypeSuffix := "Assembly"}}
+{{$TypeSuffix := "Funcs"}}
 {{$MethodSuffix := "Method"}}
 
 // {{$Type}}{{$TypeSuffix}} is an implementation of the grpc-defined type, {{$Type}}.
@@ -253,9 +270,9 @@ type {{$Type}}{{$TypeSuffix}} struct {
 	{{range .Methods}}
 		{{ if .GetClientStreaming }}
 			{{ if .GetServerStreaming }}
-				{{.Name}}{{$MethodSuffix}} func(stream {{.StreamName}}) error 
-			{{ else }}	
-				 {{.Name}}{{$MethodSuffix}} func(stream {{.StreamName}}) error 
+				{{.Name}}{{$MethodSuffix}} func(stream {{.StreamName}}) error
+			{{ else }}
+				 {{.Name}}{{$MethodSuffix}} func(stream {{.StreamName}}) error
 			{{ end }}
 		{{ else }}
 			{{ if .GetServerStreaming }}
@@ -275,7 +292,7 @@ type {{$Type}}{{$TypeSuffix}} struct {
 			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(stream {{.StreamName}}) error {
 				return t.{{.Name}}{{$MethodSuffix}}(stream)
 			}
-		{{ else }}	
+		{{ else }}
 			// {{.Name}} calls the provided implementation, {{.Name}}{{$MethodSuffix}}.
 			func (t *{{$Type}}{{$TypeSuffix}}) {{.Name}}(stream {{.StreamName}}) error {
 				return t.{{.Name}}{{$MethodSuffix}}(stream)
@@ -311,7 +328,7 @@ func New{{$Type}}{{$TypeSuffix}}() *{{$Type}}{{$TypeSuffix}} {
 				t.{{.Name}}{{$MethodSuffix}} = func(stream {{.StreamName}}) error {
 					return status.Errorf(codes.Unimplemented, "{{.Name}} has not been implemented")
 				}
-			{{ else }}	
+			{{ else }}
 				 t.{{.Name}}{{$MethodSuffix}} = func(stream {{.StreamName}}) error  {
 					return status.Errorf(codes.Unimplemented, "{{.Name}} has not been implemented")
 				}
